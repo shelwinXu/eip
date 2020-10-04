@@ -77,7 +77,7 @@ public class Main {
         System.out.println(firstTwoCollect);
         //4. Sort the artist list by age in desc.
         List<Artist> sortedByAgeList = artistList.stream()
-                .sorted((x, y) -> -Integer.compare(x.getAge(), y.getAge()))
+                .sorted((x, y) -> -Integer.compare(y.getAge(), x.getAge()))
                 .collect(Collectors.toList());
         System.out.println(sortedByAgeList);
         //5. Print artists' name

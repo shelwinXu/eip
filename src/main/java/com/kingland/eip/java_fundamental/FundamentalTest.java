@@ -1,7 +1,7 @@
 /**
  * Copyright 2020 Kingland Systems Corporation. All Rights Reserved.
  */
-package com.kingland.eip.javaFundamental;
+package com.kingland.eip.java_fundamental;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
