@@ -12,7 +12,7 @@ public class Main {
         final int fileLoggerMaxLength = 20;
         final int consoleLoggerMinLength = 5;
         final int consoleLoggerMaxLength = 10;
-        final String testException = "java.lang.ArrayIndexOutOfBoundsException";
+        final String testException = "Exception:java.lang.ArrayIndexOutOfBoundsException";
         final String testConsoleMessage = "message!";
         final String testFileMessage = "This is message!";
 

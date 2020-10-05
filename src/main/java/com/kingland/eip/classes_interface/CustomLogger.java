@@ -4,7 +4,7 @@
 package com.kingland.eip.classes_interface;
 
 /**
- * This interface 
+ * This interface
  */
 public interface CustomLogger {
 
