@@ -9,43 +9,38 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
-
-import static com.kingland.eip.asynchronous.Constants.TIMEOUT;
+import java.util.stream.Collectors;
 
 /**
+ * this main class is due to test
  * @author KSC
  */
 public class Main {
     public static void main(String[] args) {
-        CompletionStage<List<Book>> bookListStage = initBookList().thenApplyAsync(
-                booklist -> {
-                    for (Book book : booklist) {
-                        getScoreById(book.getId()).thenAcceptAsync(score -> book.setScore(score));
-                        sleep(TIMEOUT);
-                    }
-                    System.out.println(booklist);
-                    return booklist;
-                }
-        );
+        getBookList().thenCompose(books -> {
+            List<CompletionStage> bookList = books.stream()
+                    .map(book -> getScoreById(book.getId()).thenApply(score ->{
+                        book.setScore(score);
+                        return book;
+                    })).collect(Collectors.toList());
+            CompletableFuture done = CompletableFuture.allOf(bookList.toArray(new CompletableFuture[bookList.size()]));
+            return done.thenApply(v -> bookList.stream().map(CompletionStage::toCompletableFuture)
+                    .map(CompletableFuture::join).collect(Collectors.toList()));
+        }).whenComplete((books,exception) -> {
+            if (exception == null){
+                List<Book> bookList = (List<Book>) books;
+                bookList.forEach(System.out::println);
+            }else {
+                throw new RuntimeException((Exception)exception);
+            }
+        }).toCompletableFuture().join();
     }
 
     /**
-     * This method is due to timeout
-     * @param timeout
-     */
-    private static void sleep(int timeout) {
-        try {
-            Thread.sleep(timeout);
-        } catch (InterruptedException e) {
-            e.getStackTrace();
-        }
-    }
-
-    /**
-     * This method can init the book list.
+     * This method can get the book list.
      * @return
      */
-    public static CompletionStage<List<Book>> initBookList() {
+    public static CompletionStage<List<Book>> getBookList() {
         return CompletableFuture.supplyAsync(() -> {
             List<Book> bookList = new ArrayList<>();
             Book book1 = new Book.Builder()
@@ -109,17 +104,18 @@ public class Main {
      * @return
      */
     public static CompletionStage<Double> getScoreById(Long id) {
-        Map<Long, Double> bookScoreMap = new HashMap();
-        bookScoreMap.put(1L, 8.2);
-        bookScoreMap.put(2L, 7.2);
-        bookScoreMap.put(3L, 6.8);
-        bookScoreMap.put(4L, 1.9);
-        bookScoreMap.put(5L, 2.2);
-        bookScoreMap.put(6L, 4.6);
-        bookScoreMap.put(7L, 2.2);
-        bookScoreMap.put(8L, 7.0);
-        bookScoreMap.put(9L, 8.5);
-        bookScoreMap.put(10L, 9.9);
+        Map<Long, Double> bookScoreMap = new HashMap<Long,Double>(){{
+            put(1L, 8.2);
+            put(2L, 7.2);
+            put(3L, 6.8);
+            put(4L, 1.9);
+            put(5L, 2.2);
+            put(6L, 4.6);
+            put(7L, 2.2);
+            put(8L, 7.0);
+            put(9L, 8.5);
+            put(10L, 9.9);
+        }};
         return CompletableFuture.supplyAsync(() -> bookScoreMap.get(id));
     }
 }

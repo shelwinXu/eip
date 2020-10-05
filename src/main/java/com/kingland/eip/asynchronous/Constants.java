@@ -12,5 +12,4 @@ public class Constants {
     public static final int NAME_MIN_LENGTH = 1;
     public static final int NAME_MAX_LENGTH = 150;
     public static final double DEFAULT_SCORE = 0.0;
-    public static final int TIMEOUT = 100;
 }
