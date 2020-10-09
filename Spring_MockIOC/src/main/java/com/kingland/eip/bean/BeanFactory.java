@@ -7,6 +7,8 @@ import java.lang.reflect.InvocationTargetException;
 
 /**
  * define a bean factory interface
+ *
+ *  @author KSC
  */
 public interface BeanFactory {
 
@@ -14,7 +16,10 @@ public interface BeanFactory {
 
     <T> T getBean(Class<T> tClass);
 
-    void setBean(String fieldName,Class<?> tClass);
+    //void setBean(String fieldName,Class<?> tClass);
+    //
+    //void setBean(String fieldName,Class<?> tClass,String containId);
 
-    void setBean(String fieldName,Class<?> tClass,String containId);
+    void setBean(String fieldName,Class<?> tClass,String ...refIds);
+
 }
