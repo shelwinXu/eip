@@ -1,9 +1,14 @@
+/**
+ * Copyright 2020 Kingland Systems Corporation. All Rights Reserved.
+ */
 package com.kingland.eip.action;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
+/**
+ * @author KSC
+ */
 public class CollectionBean {
     private List teamList;
     private Set teamSet;

@@ -1,3 +1,6 @@
+/**
+ * Copyright 2020 Kingland Systems Corporation. All Rights Reserved.
+ */
 package com.kingland.eip;
 
 import com.kingland.eip.action.CollectionBean;
@@ -14,7 +17,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @DisplayName("test all beans use XML")
-public class ConstructorBeanTest {
+public class AllBeansTest {
 
     static ApplicationContext applicationContext;
 
