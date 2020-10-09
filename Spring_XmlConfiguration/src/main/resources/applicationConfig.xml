@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="employeeDao" class="com.kingland.eip.dao.EmployeeDao" lazy-init="true"/>
+    <!--null value-->
+    <bean id="employee" class="com.kingland.eip.domain.Employee" lazy-init="true">
+        <property name="name">
+            <null/>
+        </property>
+    </bean>
+    <!--use constructor-->
+    <bean name="constructorBean" class="com.kingland.eip.action.ConstructorBean" lazy-init="true">
+        <constructor-arg index="0" type="com.kingland.eip.dao.EmployeeDao" ref="employeeDao"/>
+        <constructor-arg index="1" type="com.kingland.eip.domain.Employee" ref="employee"/>
+    </bean>
+
+    <!--use set method-->
+    <bean name="setBean" class="com.kingland.eip.action.SetBean" lazy-init="true">
+        <property name="employeeDao" ref="employeeDao"/>
+    </bean>
+
+    <!--collection bean-->
+    <bean name="collectionBean" class="com.kingland.eip.action.CollectionBean" lazy-init="true">
+        <property name="teamList">
+            <list>
+                <value>Livepool</value>
+                <value>Man City</value>
+                <value>BVB</value>
+                <value>PSG</value>
+            </list>
+        </property>
+
+        <property name="teamSet">
+            <set>
+                <value>Livepool</value>
+                <value>Man City</value>
+                <value>BVB</value>
+                <value>PSG</value>
+            </set>
+        </property>
+
+        <property name="teamMap">
+            <map>
+                <entry key="1" value="Livepool"/>
+                <entry key="2" value="Man City"/>
+                <entry key="3" value="BVB"/>
+                <entry key="4" value="PSG"/>
+            </map>
+        </property>
+
+    </bean>
+
+
+</beans>
