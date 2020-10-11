@@ -5,6 +5,7 @@ package com.kingland.eip;
 
 import com.kingland.eip.action.CollectionBean;
 import com.kingland.eip.action.ConstructorBean;
+import com.kingland.eip.action.QualifierBean;
 import com.kingland.eip.action.SetBean;
 import com.kingland.eip.domain.Employee;
 import org.junit.jupiter.api.BeforeAll;
@@ -24,7 +25,6 @@ public class AllBeansTest {
 
     @BeforeAll
     public static void init() {
-
         applicationContext = new AnnotationConfigApplicationContext("com.kingland.eip");
     }
 
@@ -56,9 +56,17 @@ public class AllBeansTest {
     @Test
     public void testBean4() {
         Employee employeeBean = applicationContext.getBean(Employee.class);
-        System.out.println(employeeBean.toString());
+        assertNotNull(employeeBean);
         assertNotNull(employeeBean.getAge());
         assertNotNull(employeeBean.getName());
         assertNotNull(employeeBean.isActive());
+    }
+
+    @DisplayName("test qua  bean")
+    @Test
+    public void testBean5() {
+        QualifierBean qualifierBean = applicationContext.getBean(QualifierBean.class);
+        qualifierBean.check();
+        assertNotNull(qualifierBean);
     }
 }

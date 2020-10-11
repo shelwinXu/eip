@@ -9,10 +9,9 @@ import org.springframework.stereotype.Component;
  * @author KSC
  */
 @Component
-@Qualifier("strFormatter")
 public class StrFormatter implements IFormatter{
     @Override
     public String format() {
-        return "str";
+        return "this is str Formatter";
     }
 }
