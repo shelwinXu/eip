@@ -4,6 +4,8 @@
 package com.kingland.eip.datasource;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import static com.kingland.eip.common.Consts.*;
@@ -13,7 +15,7 @@ import static com.kingland.eip.common.Consts.*;
  *      1.Create a new file (if not exist) as a data source
  *      2.Use console to input data as a data source
  */
-public class MultipleDataSources<T> implements DataSource<T>{
+public class MultipleDataSources<T> implements DataSource<List<T>> {
     @Override
     public void createFileSource(String path, int fileSize) throws IOException{
         File file = new File(path);
@@ -45,7 +47,7 @@ public class MultipleDataSources<T> implements DataSource<T>{
     }
 
 
-    public T createConsoleSource() throws IOException {
+    public List<T> createConsoleSource() throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringBuffer sb = new StringBuffer();
         String str;
@@ -56,6 +58,26 @@ public class MultipleDataSources<T> implements DataSource<T>{
             sb.append(str);
             sb.append(NEWlINE);
         } while (!str.equals(END_STRING));
-        return (T) sb;
+        List<T> dataList = new ArrayList<T>();
+        String[] strings = sb.toString().split("\n");
+        for (String string : strings) {
+            dataList.add((T) string);
+        }
+        return dataList;
+    }
+
+    public List<T> createNewConsoleSource() throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        List<T> dataList = new ArrayList<T>();
+        String str;
+        System.out.println("Enter lines of text.");
+        System.out.println("Enter 'end' to quit.");
+        do {
+            str = br.readLine();
+            if (str != null) {
+                dataList.add((T) str);
+            }
+        } while (!str.equals(END_STRING));
+        return dataList;
     }
 }

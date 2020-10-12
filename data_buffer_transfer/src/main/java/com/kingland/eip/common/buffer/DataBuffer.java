@@ -20,7 +20,7 @@ public class DataBuffer<T> {
 
     public DataBuffer(int capacity) throws Exception {
         if (capacity <= 0) {
-            throw new Exception( "The buffer capacity must be larger than 0." );
+            throw new IllegalArgumentException("The buffer capacity must be larger than 0." );
         }
         this.capacity = capacity;
         this.status = DataBufferStatus.Active;
@@ -32,16 +32,26 @@ public class DataBuffer<T> {
      * @throws Exception
      */
     public void enqueue(List<T> dataList) throws Exception {
-        for (T data : dataList) {
-            if (status != DataBufferStatus.Active) {
-                throw new Exception("[enqueue] No more data can be enqueued, as the buffer status is: " + status);
+        synchronized (this){
+            while (buffer.size() >= capacity) {
+                this.wait();
             }
 
-            while (buffer.size() >= capacity) {
-                System.out.println("[enqueue] The buffer is full, waiting for new space...");
+            for (T data : dataList) {
+                if (status != DataBufferStatus.Active) {
+                    throw new Exception("[enqueue] No more data can be enqueued, as the buffer status is: " + status);
+                }
+
+                while (buffer.size() >= capacity) {
+                    System.out.println("[enqueue] The buffer is full, waiting for new space...");
+                }
+                buffer.add(data);
+
+                this.notifyAll();
             }
-            buffer.add(data);
         }
+
+        System.out.println();
     }
 
     /**
@@ -52,11 +62,18 @@ public class DataBuffer<T> {
      */
     public List <T> dequeue(int count) throws Exception {
         List <T> result = new ArrayList<T>();
+        synchronized (this){
+            while (buffer.isEmpty()){
+                this.wait();
+            }
 
-        while (result.size() < count && !buffer.isEmpty()){
-            result.add(buffer.poll());
+            while (result.size() < count && !buffer.isEmpty()){
+                result.add(buffer.poll());
+            }
+            this.notifyAll();
+            return result;
         }
-        return result;
+
     }
 
     public DataBufferStatus getStatus() {

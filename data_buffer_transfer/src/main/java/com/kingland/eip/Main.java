@@ -7,6 +7,7 @@ import com.kingland.eip.common.buffer.DataBuffer;
 import com.kingland.eip.datasource.MultipleDataSources;
 
 import java.util.Collections;
+import java.util.List;
 
 import static com.kingland.eip.data_transfer.DataSender.sendDataFun;
 
@@ -15,15 +16,21 @@ import static com.kingland.eip.data_transfer.DataSender.sendDataFun;
  */
 public class Main {
     public static void main(String[] args) throws Exception {
-        String filePath = "src/main/resources/Files/dataSource.txt";
-        String designationPath = "src/main/resources/Files/designation.txt";
+        //String filePath = "data_buffer_transfer/src/main/resources/Files/dataSource.txt";
+        String designationPath = "data_buffer_transfer/src/main/resources/Files/designation.txt";
         int filesize = 1024;
         MultipleDataSources multipleDataSources = new MultipleDataSources();
-        multipleDataSources.createFileSource(filePath,filesize);
+        //multipleDataSources.createFileSource(filePath,filesize);
 
-        Object consoleSource = multipleDataSources.createConsoleSource();
+        //List consoleSource = multipleDataSources.createConsoleSource();
+        List consoleSource = multipleDataSources.createNewConsoleSource();
         DataBuffer dataBuffer = new DataBuffer(10);
-        dataBuffer.enqueue(Collections.singletonList(consoleSource));
-        sendDataFun(dataBuffer,designationPath);
+        //dataBuffer.enqueue(Collections.singletonList(consoleSource));
+        dataBuffer.enqueue(consoleSource);
+        dataBuffer.dequeue(10);
+        //dataBuffer.enqueue(consoleSource);
+
+        //sendDataFun(dataBuffer,designationPath);
+
     }
 }
