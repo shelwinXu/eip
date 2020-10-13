@@ -9,7 +9,6 @@ import com.kingland.eip.datasource.MultipleDataSources;
 import java.util.Collections;
 import java.util.List;
 
-import static com.kingland.eip.data_transfer.DataSender.sendDataFun;
 
 /**
  * this main can test the project

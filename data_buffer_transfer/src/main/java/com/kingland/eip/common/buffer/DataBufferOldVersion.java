@@ -7,20 +7,18 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-import static com.kingland.eip.common.Consts.END_STRING;
-
 /**
  * This class is define a buffer
  * @param <T>
  */
-public class DataBuffer<T> {
+public class DataBufferOldVersion<T> {
     private int capacity;
 
     private ConcurrentLinkedQueue<T> buffer = new ConcurrentLinkedQueue <T>();
 
     private DataBufferStatus status;
 
-    public DataBuffer(int capacity) throws Exception {
+    public DataBufferOldVersion(int capacity) throws Exception {
         if (capacity <= 0) {
             throw new IllegalArgumentException("The buffer capacity must be larger than 0." );
         }
@@ -34,28 +32,17 @@ public class DataBuffer<T> {
      * @throws Exception
      */
     public void enqueue(List<T> dataList) throws Exception {
-        synchronized (this){
-            //while (buffer.size() == capacity) {
-            //
-            //}
-            for (T data : dataList) {
-                if (status != DataBufferStatus.Active) {
-                    throw new Exception("[enqueue] No more data can be enqueued, as the buffer status is: " + status);
-                }
-
-                if(buffer.size() == capacity) {
-                   System.out.println("[enqueue] The buffer is full, waiting for new space...");
-                   this.wait(4000);
-                }
-
-
-                buffer.add(data);
-                //if (END_STRING.equals(data.toString())){
-                //    break;
-                //}
+        for (T data : dataList) {
+            if (status != DataBufferStatus.Active) {
+                throw new Exception("[enqueue] No more data can be enqueued, as the buffer status is: " + status);
             }
-            this.notifyAll();
+
+            while (buffer.size() >= capacity) {
+                System.out.println("[enqueue] The buffer is full, waiting for new space...");
+            }
+            buffer.add(data);
         }
+        System.out.println();
     }
 
     /**
@@ -66,19 +53,11 @@ public class DataBuffer<T> {
      */
     public List <T> dequeue(int count) throws Exception {
         List <T> result = new ArrayList<T>();
-        synchronized (this){
-            while (buffer.isEmpty()){
-                System.out.println("The buffer is empty, waiting for new data input...");
-                this.wait(4000);
-            }
 
-            while (result.size() < count && !buffer.isEmpty()){
-                result.add(buffer.poll());
-            }
-            this.notifyAll();
-            return result;
+        while (result.size() < count && !buffer.isEmpty()){
+            result.add(buffer.poll());
         }
-
+        return result;
     }
 
     public DataBufferStatus getStatus() {

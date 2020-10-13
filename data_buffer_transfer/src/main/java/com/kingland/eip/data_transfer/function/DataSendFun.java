@@ -8,5 +8,5 @@ import java.util.List;
  */
 public interface DataSendFun<T> {
 
-    void execute(List<T> datalist) throws Exception;
+    void sendData(List<T> datalist,String filepath) throws Exception;
 }
