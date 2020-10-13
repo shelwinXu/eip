@@ -1,0 +1,15 @@
+spring:
+  profiles:
+    active: dev
+  datasource:
+    url: jdbc:postgresql://localhost:5432/eip_springboot
+    username: postgres
+    password: pg123456
+
+flyway:
+  enabled: false
+  clean-disabled: true
+  baseline-on-migrate: true
+  baseline-version: 0
+  locations:
+    - classpath:db/migration
