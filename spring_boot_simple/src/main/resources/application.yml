@@ -13,3 +13,8 @@ flyway:
   baseline-version: 0
   locations:
     - classpath:db/migration
+mybatis:
+  type-aliases-package: com.kingland.eip.domain
+  mapper-locations: classpath:mapper/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
