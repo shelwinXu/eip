@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-import static com.kingland.eip.common.Consts.END_STRING;
+import static com.kingland.eip.common.Consts.MAX_TIMEOUT;
 
 /**
  * This class is define a buffer
@@ -35,9 +35,6 @@ public class DataBuffer<T> {
      */
     public void enqueue(List<T> dataList) throws Exception {
         synchronized (this){
-            //while (buffer.size() == capacity) {
-            //
-            //}
             for (T data : dataList) {
                 if (status != DataBufferStatus.Active) {
                     throw new Exception("[enqueue] No more data can be enqueued, as the buffer status is: " + status);
@@ -45,14 +42,10 @@ public class DataBuffer<T> {
 
                 if(buffer.size() == capacity) {
                    System.out.println("[enqueue] The buffer is full, waiting for new space...");
-                   this.wait(4000);
+                   this.wait(MAX_TIMEOUT);
                 }
 
-
                 buffer.add(data);
-                //if (END_STRING.equals(data.toString())){
-                //    break;
-                //}
             }
             this.notifyAll();
         }
@@ -69,7 +62,7 @@ public class DataBuffer<T> {
         synchronized (this){
             while (buffer.isEmpty()){
                 System.out.println("The buffer is empty, waiting for new data input...");
-                this.wait(4000);
+                this.wait(MAX_TIMEOUT);
             }
 
             while (result.size() < count && !buffer.isEmpty()){

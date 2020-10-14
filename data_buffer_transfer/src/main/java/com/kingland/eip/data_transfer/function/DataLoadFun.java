@@ -1,3 +1,6 @@
+/**
+ * Copyright 2020 Kingland Systems Corporation. All Rights Reserved.
+ */
 package com.kingland.eip.data_transfer.function;
 
 import java.util.List;
@@ -8,5 +11,5 @@ import java.util.List;
  */
 public interface DataLoadFun<T> {
 
-    List<T> apply(int batchSize) throws Exception;
+    void loadData(List<T> dataList, String path);
 }

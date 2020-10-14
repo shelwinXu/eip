@@ -4,63 +4,37 @@
 package com.kingland.eip.data_transfer;
 
 import com.kingland.eip.data_transfer.function.DataSendFun;
+import com.kingland.eip.datasource.MultipleDataSources;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.OutputStreamWriter;
+import java.io.*;
+import java.util.ArrayList;
 import java.util.List;
 
-import static com.kingland.eip.common.Consts.*;
+import static com.kingland.eip.common.Consts.UTF_8;
 
-/**
- * This class can send the data
- */
 public class DataSender<T> implements DataSendFun {
-    //public static void sendDataFun(DataBuffer dataBuffer, String path) {
-    //    FileOutputStream outputStream = null;
-    //    try {
-    //        File file = new File(path);
-    //        if (!file.exists()) {
-    //            file.createNewFile();
-    //        }
-    //        outputStream = new FileOutputStream(file, true);
-    //        OutputStreamWriter writer = new OutputStreamWriter(outputStream, UTF_8);
-    //        List dequeue = dataBuffer.dequeue(1);
-    //        for (int i = 0; i < dequeue.size(); i++) {
-    //            writer.append(dequeue.get(i).toString());
-    //        }
-    //        writer.close();
-    //        outputStream.flush();
-    //        outputStream.close();
-    //    } catch (Exception e) {
-    //        e.printStackTrace();
-    //    }
-    //}
+    MultipleDataSources dataSources = new MultipleDataSources();
     @Override
-    public void sendData(List dataList, String path) {
-        FileOutputStream outputStream = null;
-        try {
-            File file = new File(path);
-            if (!file.exists()) {
-                file.createNewFile();
-            }
-            outputStream = new FileOutputStream(file, true);
-            OutputStreamWriter writer = new OutputStreamWriter(outputStream, UTF_8);
-
-            for (int i = 0; i < dataList.size(); i++) {
-                if (END_STRING.equals(dataList.get(i).toString())){
-                    break;
-                }
-                writer.append(NEWlINE);
-                writer.append(dataList.get(i).toString());
-            }
-
-            writer.close();
-            outputStream.flush();
-            outputStream.close();
-        } catch (Exception e) {
-            e.printStackTrace();
+    public List<T> sendData(String path, int fileSize) throws IOException {
+        List<T> dataList = new ArrayList<T>();
+        File file = new File(path);
+        if (!file.exists()){
+            dataSources.createFileSource(path,fileSize);
         }
+        FileInputStream fip = new FileInputStream(file);
+        InputStreamReader reader = new InputStreamReader(fip, UTF_8);
+        BufferedReader br = null;
+        String str;
+        br = new BufferedReader(reader);
+        while ((str = br.readLine()) != null) {
+            System.out.println(str);
+            dataList.add((T) str);
+        }
+        // Close the read stream
+        reader.close();
+        // Close the input stream and release system resources
+        fip.close();
+        return dataList;
     }
 
 }
