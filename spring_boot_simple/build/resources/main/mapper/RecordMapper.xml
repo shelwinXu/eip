@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.kingland.eip.mapper.RecordMapper">
+    <resultMap id="BaseResultMap" type="com.kingland.eip.domain.RecordModel">
+        <result column="team_name" property="teamName"/>
+        <result column="champion_times" property="championTimes"/>
+        <result column="runner_up_times" property="runnerUpTimes"/>
+        <result column="champion_years" property="championYears" typeHandler="com.kingland.eip.handle.ArrayTypeHandler"/>
+        <result column="runner_up_years" property="runnerUpYears" typeHandler="com.kingland.eip.handle.ArrayTypeHandler"/>
+        <result column="ranks" property="ranks"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        team_name,champion_times,runner_up_times,runner_up_times,champion_years,runner_up_years,ranks
+    </sql>
+
+    <select id="findRecordByRanks" resultType="com.kingland.eip.domain.RecordModel">
+        select
+        <include refid="Base_Column_List"/>
+        from uefa_champions_statistics
+        where ranks = #{ranks}
+    </select>
+
+    <select id="findAllRecords" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from uefa_champions_statistics
+    </select>
+</mapper>
