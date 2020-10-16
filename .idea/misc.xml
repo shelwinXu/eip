@@ -4,6 +4,8 @@
   <component name="FrameworkDetectionExcludesConfiguration">
     <file type="web" url="file://$PROJECT_DIR$/data_buffer_transfer" />
     <file type="web" url="file://$PROJECT_DIR$/Spring_MockIOC" />
+    <file type="web" url="file://$PROJECT_DIR$/../../EHM/shelwin/eip/spring_AnnotationConfiguration" />
+    <file type="web" url="file://$PROJECT_DIR$/../../EHM/shelwin/eip/spring_boot_simple" />
   </component>
   <component name="JavaScriptSettings">
     <option name="languageLevel" value="ES6" />
