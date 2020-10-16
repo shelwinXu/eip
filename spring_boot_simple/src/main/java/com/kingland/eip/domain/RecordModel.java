@@ -10,12 +10,21 @@ import java.util.Arrays;
  * @author KSC
  */
 public class RecordModel implements Serializable {
+    private Long userId;
     private String teamName;
     private int championTimes;
     private int runnerUpTimes;
     private String[] championYears;
     private String[] runnerUpYears;
     private int ranks;
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
 
     public String getTeamName() {
         return teamName;
@@ -68,7 +77,8 @@ public class RecordModel implements Serializable {
     @Override
     public String toString() {
         return "RecordModel{" +
-                "teamName='" + teamName + '\'' +
+                "userId=" + userId +
+                ", teamName='" + teamName + '\'' +
                 ", championTimes=" + championTimes +
                 ", runnerUpTimes=" + runnerUpTimes +
                 ", championYears=" + Arrays.toString(championYears) +
