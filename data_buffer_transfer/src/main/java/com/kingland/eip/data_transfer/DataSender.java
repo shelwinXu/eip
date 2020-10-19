@@ -3,38 +3,35 @@
  */
 package com.kingland.eip.data_transfer;
 
+import com.kingland.eip.common.buffer.DataBuffer;
 import com.kingland.eip.data_transfer.function.DataSendFun;
-import com.kingland.eip.datasource.MultipleDataSources;
 
 import java.io.*;
-import java.util.ArrayList;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
-import static com.kingland.eip.common.Consts.UTF_8;
+import static com.kingland.eip.common.Consts.END_STRING;
+import static com.kingland.eip.common.Consts.NEWlINE;
 
 public class DataSender<T> implements DataSendFun {
-    MultipleDataSources dataSources = new MultipleDataSources();
     @Override
-    public List<T> sendData(String path, int fileSize) throws IOException {
-        List<T> dataList = new ArrayList<T>();
+    public void sendData(DataBuffer dataBuffer, int count, String path) throws Exception {
+        List<T> dataList = dataBuffer.dequeue(count);
         File file = new File(path);
-        if (!file.exists()){
-            dataSources.createFileSource(path,fileSize);
+        try (FileOutputStream outputStream = new FileOutputStream(file, true);
+             OutputStreamWriter writer = new OutputStreamWriter(outputStream, StandardCharsets.UTF_8)) {
+            if (!file.exists()) {
+                file.createNewFile();
+            }
+            for (Object obj : dataList) {
+                if (END_STRING.equals(obj.toString())) {
+                    break;
+                }
+                writer.append(NEWlINE);
+                writer.append(obj.toString());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        FileInputStream fip = new FileInputStream(file);
-        InputStreamReader reader = new InputStreamReader(fip, UTF_8);
-        BufferedReader br = null;
-        String str;
-        br = new BufferedReader(reader);
-        while ((str = br.readLine()) != null) {
-            System.out.println(str);
-            dataList.add((T) str);
-        }
-        // Close the read stream
-        reader.close();
-        // Close the input stream and release system resources
-        fip.close();
-        return dataList;
     }
-
 }

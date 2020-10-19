@@ -35,16 +35,15 @@ public class DataBuffer<T> {
      */
     public void enqueue(List<T> dataList) throws Exception {
         synchronized (this){
-            for (T data : dataList) {
-                if (status != DataBufferStatus.Active) {
-                    throw new Exception("[enqueue] No more data can be enqueued, as the buffer status is: " + status);
-                }
+            if (status != DataBufferStatus.Active) {
+                throw new Exception("[enqueue] No more data can be enqueued, as the buffer status is: " + status);
+            }
 
+            for (T data : dataList) {
                 if(buffer.size() == capacity) {
                    System.out.println("[enqueue] The buffer is full, waiting for new space...");
                    this.wait(MAX_TIMEOUT);
                 }
-
                 buffer.add(data);
             }
             this.notifyAll();

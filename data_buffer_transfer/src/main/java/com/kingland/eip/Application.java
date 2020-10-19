@@ -3,23 +3,28 @@
  */
 package com.kingland.eip;
 
-import com.kingland.eip.common.Consts;
 import com.kingland.eip.common.buffer.DataBuffer;
 import com.kingland.eip.data_transfer.DataLoader;
 import com.kingland.eip.data_transfer.DataSender;
-import com.kingland.eip.datasource.MultipleDataSources;
+import com.kingland.eip.datasource.ReadConsoleSource;
+import com.kingland.eip.datasource.ReadFileSource;
 
+import java.io.BufferedReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import static com.kingland.eip.common.Consts.FINAL_SOURCE_PATH;
+
 public class Application {
     public static void main(String[] args) throws Exception {
-        final int capacity = 100;
         final int threads = 2;
+        final int capacity = 50;
         String sourcePath = null;
-        List sourceList = new ArrayList<>();
-
+        DataBuffer dataBuffer = new DataBuffer(capacity);
+        BufferedReader br;
+        //1.choose the datasource
+        //  the file datasource is given
         System.out.println("=====Data===Buffer===Transfer===System=====");
         System.out.println("===Please choose the transmission mode: ===");
         System.out.println("===1: file system    ===2: console transfer");
@@ -28,27 +33,24 @@ public class Application {
         switch (modeInt) {
             case 1:
                 sourcePath = "data_buffer_transfer/src/main/resources/Files/dataSource.txt";
-                DataSender dataSender = new DataSender<>();
-                sourceList = dataSender.sendData(sourcePath, 10);
+                br = new ReadFileSource().readSource(sourcePath);
                 break;
             case 2:
-                sourceList = new MultipleDataSources().createConsoleSource();
+                br = new ReadConsoleSource().readSource();
                 break;
             default:
                 throw new IllegalArgumentException("the mode you type is vaild!");
         }
-        DataBuffer dataBuffer = new DataBuffer(capacity);
 
-        int sourceSize = sourceList.size();
-        // every threads run specific times which according to the source size
-        final int times = sourceSize % capacity == 0 ? sourceSize / capacity : sourceSize / capacity + 1;
-
+        //2.load data into buffer
+        DataLoader dataLoader = new DataLoader();
         List<Thread> threadList = new ArrayList<>(threads);
-        List finalSourceList = sourceList;
+
+        int loadTimes = 3;
         Thread producer = new Thread(() -> {
             try {
-                for (int j = 0; j < times; ++j) {
-                    dataBuffer.enqueue(finalSourceList);
+                for (int j = 0; j < loadTimes; ++j) {
+                    dataLoader.loadData(br,dataBuffer);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -57,15 +59,15 @@ public class Application {
         threadList.add(producer);
         producer.start();
 
-        DataLoader dataLoader = new DataLoader();
-        // create consumer thread
-        String finalSourcePath = Consts.FINAL_SOURCE_PATH;
+        //3.send data to destination
+        DataSender dataSender = new DataSender();
+        int sendTimes = 11;
+        int count = 10;
         Thread consumer = new Thread(() -> {
             try {
-                for (int j = 0; j < times; ++j) {
-                    dataLoader.loadData(dataBuffer.dequeue(capacity), finalSourcePath);
+                for (int j = 0; j < sendTimes; ++j) {
+                    dataSender.sendData(dataBuffer, count, FINAL_SOURCE_PATH);
                 }
-
             } catch (Exception e) {
                 e.printStackTrace();
             }

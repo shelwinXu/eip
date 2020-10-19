@@ -3,6 +3,8 @@
  */
 package com.kingland.eip.data_transfer.function;
 
+import com.kingland.eip.common.buffer.DataBuffer;
+
 import java.util.List;
 
 /**
@@ -11,5 +13,5 @@ import java.util.List;
  */
 public interface DataSendFun<T> {
 
-    List<T> sendData(String path, int fileSize) throws Exception;
+    void sendData(DataBuffer<T> dataBuffer, int count, String path) throws Exception;
 }

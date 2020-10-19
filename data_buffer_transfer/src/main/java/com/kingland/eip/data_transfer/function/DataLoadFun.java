@@ -3,6 +3,9 @@
  */
 package com.kingland.eip.data_transfer.function;
 
+import com.kingland.eip.common.buffer.DataBuffer;
+
+import java.io.BufferedReader;
 import java.util.List;
 
 /**
@@ -11,5 +14,5 @@ import java.util.List;
  */
 public interface DataLoadFun<T> {
 
-    void loadData(List<T> dataList, String path);
+    void loadData(BufferedReader reader, DataBuffer<T> buffer) throws Exception;
 }
