@@ -23,8 +23,9 @@ public class Application {
         String sourcePath = null;
         DataBuffer dataBuffer = new DataBuffer(capacity);
         BufferedReader br;
-        //1.choose the datasource
-        //  the file datasource is given
+        //1.choose the datasource: File or Console input
+        // the file datasource is given
+        // the console datasource need to input and end by "end" string
         System.out.println("=====Data===Buffer===Transfer===System=====");
         System.out.println("===Please choose the transmission mode: ===");
         System.out.println("===1: file system    ===2: console transfer");
@@ -46,12 +47,9 @@ public class Application {
         DataLoader dataLoader = new DataLoader();
         List<Thread> threadList = new ArrayList<>(threads);
 
-        int loadTimes = 3;
         Thread producer = new Thread(() -> {
             try {
-                for (int j = 0; j < loadTimes; ++j) {
-                    dataLoader.loadData(br,dataBuffer);
-                }
+                dataLoader.loadData(br, dataBuffer);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -61,13 +59,10 @@ public class Application {
 
         //3.send data to destination
         DataSender dataSender = new DataSender();
-        int sendTimes = 11;
         int count = 10;
         Thread consumer = new Thread(() -> {
             try {
-                for (int j = 0; j < sendTimes; ++j) {
-                    dataSender.sendData(dataBuffer, count, FINAL_SOURCE_PATH);
-                }
+                dataSender.sendData(dataBuffer, count, FINAL_SOURCE_PATH);
             } catch (Exception e) {
                 e.printStackTrace();
             }

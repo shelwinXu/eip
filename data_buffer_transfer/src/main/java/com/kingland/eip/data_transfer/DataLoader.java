@@ -16,14 +16,24 @@ import static com.kingland.eip.common.Consts.*;
  * This class can load the data
  */
 public class DataLoader<T> implements DataLoadFun {
-
-    public void loadData(BufferedReader br, DataBuffer buffer) throws Exception {
+    @Override
+    public void loadData(BufferedReader br, DataBuffer dataBuffer) throws Exception {
         String str = null;
-        do {
-            str = br.readLine();
-            if (str != null && buffer.getStatus() == DataBufferStatus.Active) {
-                buffer.enqueue(Collections.singletonList((T) str));
+        while ((str = br.readLine()) != null) {
+            if (CONSOLE_END_STRING.equals(str)) {
+                endLoad(br, dataBuffer);
+                return;
             }
-        } while (!END_STRING.equals(str));
+
+            if (dataBuffer.getStatus() == DataBufferStatus.Active) {
+                dataBuffer.enqueue(Collections.singletonList((T) str));
+            }
+        }
+        endLoad(br, dataBuffer);
+    }
+
+    public void endLoad(BufferedReader br, DataBuffer dataBuffer) throws Exception {
+        dataBuffer.setStatus(DataBufferStatus.EnqueueCompleted);
+        br.close();
     }
 }
