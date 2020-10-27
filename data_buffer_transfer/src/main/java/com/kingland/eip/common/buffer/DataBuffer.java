@@ -20,7 +20,7 @@ public class DataBuffer<T> {
 
     private DataBufferStatus status;
 
-    public DataBuffer(int capacity) throws Exception {
+    public DataBuffer(int capacity) {
         if (capacity <= 0) {
             throw new IllegalArgumentException("The buffer capacity must be larger than 0." );
         }
@@ -62,6 +62,7 @@ public class DataBuffer<T> {
             while (buffer.isEmpty()){
                 System.out.println("The buffer is empty, waiting for new data input...");
                 this.wait(MAX_TIMEOUT);
+                setStatus(DataBufferStatus.DequeueCompleted);
                 return result;
             }
 

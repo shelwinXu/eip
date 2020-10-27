@@ -3,6 +3,8 @@
  */
 package com.kingland.eip.datasource;
 
+import com.kingland.eip.common.Consts;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -14,15 +16,17 @@ public class ReadFileSource implements ReadSource{
 
     @Override
     public BufferedReader readSource(String ...path) {
-        if (path.length != 1){
+        if (path.length != Consts.FILE_PATH_NUMBER_REQUIRE){
             throw new RuntimeException("The File source's path is not valid!");
         }
         BufferedReader br = null;
+
         try {
             br = new BufferedReader(new FileReader(new File(path[FILE_PATH_NUMBER])));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
+
         return br;
     }
 }

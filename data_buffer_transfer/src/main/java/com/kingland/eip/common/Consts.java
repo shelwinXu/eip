@@ -13,4 +13,5 @@ public class Consts {
     public static final char NEWlINE = (char) 10;
     public static final String CONSOLE_END_STRING = "end";
     public static final String FINAL_SOURCE_PATH = "data_buffer_transfer/src/main/resources/Files/designation.txt";
+    public static final int FILE_PATH_NUMBER_REQUIRE = 1;
 }

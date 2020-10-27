@@ -10,7 +10,6 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -23,15 +22,15 @@ public class DataLoaderTest {
     static DataLoader dataLoader;
 
     @BeforeAll
-    public static void initAllParameters() throws IOException {
+    public static void initAllParameters() {
         br = Mockito.mock(BufferedReader.class);
-        Mockito.when(br.readLine()).thenReturn("line1","line2","line3","end");
         dataBuffer = new DataBuffer(5);
         dataLoader = new DataLoader();
     }
 
     @Test
     public void shouldLoadDataSuccess() throws Exception {
+        Mockito.when(br.readLine()).thenReturn("line1","line2","line3","end");
         dataLoader.loadData(br,dataBuffer);
 
         assertEquals(DataBufferStatus.EnqueueCompleted,dataBuffer.getStatus());
