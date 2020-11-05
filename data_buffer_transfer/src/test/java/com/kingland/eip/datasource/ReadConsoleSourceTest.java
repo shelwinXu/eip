@@ -44,8 +44,11 @@ public class ReadConsoleSourceTest {
         Exception exception = assertThrows(RuntimeException.class, ()->{
             readConsoleSource.readSource(filePath1);
         });
-        String excepectedMessage = "Console source does not need a file path!";
+        String expectedType = "RuntimeException";
+        String expectedMessage = "Console source does not need a file path!";
+        String actualType = exception.getClass().toString();
         String actualMessage = exception.getMessage();
-        assertTrue(actualMessage.contains(excepectedMessage));
+        assertTrue(actualType.contains(expectedType));
+        assertTrue(actualMessage.contains(expectedMessage));
     }
 }
