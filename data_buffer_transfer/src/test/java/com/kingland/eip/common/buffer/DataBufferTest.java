@@ -36,9 +36,14 @@ public class DataBufferTest {
         Exception exception = assertThrows(IllegalArgumentException.class, ()->{
             dataBuffer = new DataBuffer(-1);
         });
-        String excepectedMessage = "The buffer capacity must be larger than 0";
+        String expectedType = "IllegalArgumentException";
+        String expectedMessage = "The buffer capacity must be larger than 0";
+        String actualType = exception.getClass().toString();
         String actualMessage = exception.getMessage();
-        assertTrue(actualMessage.contains(excepectedMessage));
+
+        assertNotNull(exception);
+        assertTrue(actualType.contains(expectedType));
+        assertTrue(actualMessage.contains(expectedMessage));
     }
 
     @Test
@@ -54,9 +59,12 @@ public class DataBufferTest {
         Exception exception = assertThrows(Exception.class, ()->{
             dataBuffer.enqueue(dataList);
         });
-        String excepectedMessage = "[enqueue] No more data can be enqueued, as the buffer status is:";
+        String expectedType = "Exception";
+        String expectedMessage = "[enqueue] No more data can be enqueued, as the buffer status is:";
         String actualMessage = exception.getMessage();
-        assertTrue(actualMessage.contains(excepectedMessage));
+        assertNotNull(exception);
+        assertTrue(actualMessage.contains(expectedType));
+        assertTrue(actualMessage.contains(expectedMessage));
     }
 
     @Test
