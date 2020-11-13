@@ -40,6 +40,8 @@ public class DataBufferTest {
         String expectedMessage = "The buffer capacity must be larger than 0";
         String actualType = exception.getClass().toString();
         String actualMessage = exception.getMessage();
+
+        assertNotNull(exception);
         assertTrue(actualType.contains(expectedType));
         assertTrue(actualMessage.contains(expectedMessage));
     }
@@ -60,6 +62,7 @@ public class DataBufferTest {
         String expectedType = "Exception";
         String expectedMessage = "[enqueue] No more data can be enqueued, as the buffer status is:";
         String actualMessage = exception.getMessage();
+        assertNotNull(exception);
         assertTrue(actualMessage.contains(expectedType));
         assertTrue(actualMessage.contains(expectedMessage));
     }

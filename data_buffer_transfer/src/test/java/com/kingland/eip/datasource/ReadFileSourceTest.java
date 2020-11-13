@@ -46,6 +46,7 @@ public class ReadFileSourceTest {
         String expectedMessage = "The File source's path is not valid!";
         String actualType = exception.getClass().toString();
         String actualMessage = exception.getMessage();
+        assertNotNull(exception);
         assertTrue(actualType.contains(expectedType));
         assertTrue(actualMessage.contains(expectedMessage));
     }
