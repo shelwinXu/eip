@@ -62,7 +62,6 @@ public class DataBuffer<T> {
             while (buffer.isEmpty()){
                 System.out.println("The buffer is empty, waiting for new data input...");
                 this.wait(MAX_TIMEOUT);
-                setStatus(DataBufferStatus.DequeueCompleted);
                 return result;
             }
 

@@ -42,12 +42,10 @@ public class ReadFileSourceTest {
         Exception exception = assertThrows(RuntimeException.class, ()->{
             readFileSource.readSource(filePath1,filePath2);
         });
-        String expectedType = "RuntimeException";
-        String expectedMessage = "The File source's path is not valid!";
-        String actualType = exception.getClass().toString();
-        String actualMessage = exception.getMessage();
+
+        String expectedType = "java.lang.RuntimeException";
+
         assertNotNull(exception);
-        assertTrue(actualType.contains(expectedType));
-        assertTrue(actualMessage.contains(expectedMessage));
+        assertTrue(exception.getClass().toString().contains(expectedType));
     }
 }
