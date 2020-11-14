@@ -19,6 +19,7 @@ public class ReadConsoleSourceTest {
 
     @Test
     public void shouldReadFileSourceByNotExistFile() throws IOException {
+        //given some strings analog console input
         readConsoleSource = new ReadConsoleSource();
         String data = "Hello, World!\r\n";
         InputStream stdin = System.in;
@@ -29,23 +30,27 @@ public class ReadConsoleSourceTest {
         } finally {
             System.setIn(stdin);
         }
+        //when BufferedReader read source
         BufferedReader br = readConsoleSource.readSource();
 
+        //then BufferedReader is not null and ready
         assertNotNull(br);
         assertTrue(br.ready());
     }
 
     @Test
     public void shouldReadConsoleSourceThrowsException() {
+        //given the extra data source filepath and try to read the source
         String filePath1 = "src/main/resources/Files/test1.txt";
         readConsoleSource = new ReadConsoleSource();
 
+        //when readConsoleSource start to read the source
         Exception exception = assertThrows(RuntimeException.class, ()->{
             readConsoleSource.readSource(filePath1);
         });
 
+        //then handle the RuntimeException
         String expectedType = "java.lang.RuntimeException";
-
         assertNotNull(exception);
         assertTrue(exception.getClass().toString().contains(expectedType));
     }

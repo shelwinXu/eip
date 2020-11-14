@@ -23,6 +23,7 @@ public class DataLoaderTest {
 
     @BeforeAll
     public static void initAllParameters() {
+        //init BufferedReader、DataBuffer、DataLoader
         br = Mockito.mock(BufferedReader.class);
         dataBuffer = new DataBuffer(5);
         dataLoader = new DataLoader();
@@ -30,16 +31,23 @@ public class DataLoaderTest {
 
     @Test
     public void shouldLoadDataSuccess() throws Exception {
+        //given analog data
         Mockito.when(br.readLine()).thenReturn("line1","line2","line3","end");
+
+        //when load the data in the br(BufferedReader)
         dataLoader.loadData(br,dataBuffer);
 
+        //then dataBuffer have the data and DataBufferStatus is EnqueueCompleted
         assertEquals(DataBufferStatus.EnqueueCompleted,dataBuffer.getStatus());
         assertEquals(3,dataBuffer.dequeue(3).size());
     }
 
     @Test
     public void shouldEndLoadSuccess( ) throws Exception {
+        //when endLoad the data
         dataLoader.endLoad(br,dataBuffer);
+
+        //then the br(BufferedReader) close and DataBufferStatus is EnqueueCompleted
         assertFalse(br.ready());
         assertEquals(DataBufferStatus.EnqueueCompleted,dataBuffer.getStatus());
     }
