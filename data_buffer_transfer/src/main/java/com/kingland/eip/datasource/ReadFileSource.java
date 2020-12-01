@@ -5,10 +5,10 @@ package com.kingland.eip.datasource;
 
 import com.kingland.eip.common.Consts;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.stream.Stream;
 
 import static com.kingland.eip.common.Consts.FILE_PATH_NUMBER;
 
@@ -28,5 +28,20 @@ public class ReadFileSource implements ReadSource{
         }
 
         return br;
+    }
+
+    public Stream<String> readStream(String ...path){
+        if (path.length != Consts.FILE_PATH_NUMBER_REQUIRE){
+            throw new RuntimeException("The File source's path is not valid!");
+        }
+
+        try {
+            Stream<String> lines = Files.lines(Paths.get(path[0]));
+            return lines;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return Stream.empty();
     }
 }

@@ -9,6 +9,7 @@ import com.kingland.eip.data_transfer.function.DataLoadFun;
 
 import java.io.*;
 import java.util.Collections;
+import java.util.stream.Stream;
 
 import static com.kingland.eip.common.Consts.*;
 
@@ -30,6 +31,23 @@ public class DataLoader<T> implements DataLoadFun {
             }
         }
         endLoad(br, dataBuffer);
+    }
+
+    public void loadSteam(Stream<String> lines, DataBuffer dataBuffer) throws Exception {
+        /*String str = null;
+        while ((str = br.readLine()) != null) {
+            if (CONSOLE_END_STRING.equals(str)) {
+                endLoad(br, dataBuffer);
+                return;
+            }
+
+            if (dataBuffer.getStatus() == DataBufferStatus.Active) {
+                dataBuffer.enqueue(Collections.singletonList((T) str));
+            }
+        }*/
+        //endLoad(br, dataBuffer);
+        lines.filter(line -> !line.equals(CONSOLE_END_STRING))
+                .forEach(System.out::println);
     }
 
     public void endLoad(BufferedReader br, DataBuffer dataBuffer) throws Exception {
