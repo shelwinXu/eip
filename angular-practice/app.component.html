@@ -1,0 +1,26 @@
+<mat-form-field appearance="fill">
+<mat-label>Selected</mat-label>
+<mat-select [(value)]="selectType">
+  <mat-option>None</mat-option>
+  <mat-option value="text">text</mat-option>
+  <mat-option value="image">image</mat-option>
+</mat-select>
+</mat-form-field>
+
+<!-- <select [(value)]="selectType">
+  <option>None</option>
+  <option value="text">text</option>
+  <option value="image">image</option>
+</select> -->
+
+<!-- <p>You selected: {{selectType}}</p> -->
+<input #newInput
+    (keyup.enter)="addInput(newInput.value)"
+    (blur)="addInput(newInput.value); newInput.value='' ">
+
+  <button (click)="addInput(newInput.value)"  >{{selectType}}</button>
+
+  <ul><li *ngFor="let input of inputs">{{input}}</li></ul>
+  <!-- <img *ngIf= "showImage" ng-src="assets/images/garden.png"> -->
+  <img *ngIf= "showImage" src= "assets/images/garden.png">
+  <ul><li>{{showImage}}</li></ul>
